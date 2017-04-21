@@ -1,0 +1,8 @@
+body {
+  background-color: gray;
+}
+
+#artikkel {
+    background-color: lightgray;
+    max-width: 1024px;
+}
