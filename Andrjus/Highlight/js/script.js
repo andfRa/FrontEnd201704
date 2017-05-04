@@ -1,4 +1,5 @@
 "use strict";
+
 $(document).ready(function() {
     highlighter.init();
 });
@@ -18,6 +19,20 @@ var highlighter = (function () {
       return false;
     }
   }
+
+    var removeTag = function() {
+      var selection = window.getSelection();
+      if (selection.rangeCount !== 0 && !selection.isCollapsed) {
+        var range = window.getSelection().getRangeAt(0);
+        console.log(range.commonAncestorContainer);
+        var selectionContents = range.extractContents();
+        range.insertNode(document.createTextNode(selectionContents.textContent));
+        //node.parentElement.removeChild(node);
+        return true;
+      } else {
+        return false;
+      }
+    }
 
   var updateButtons = function() {
     var selection = window.getSelection();
@@ -45,7 +60,7 @@ var highlighter = (function () {
       });
 
       $('#clear-button').click(function() {
-        alert('TODO');
+        removeTag();
       });
 
       document.addEventListener("selectionchange", function() {
