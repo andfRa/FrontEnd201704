@@ -1,3 +1,5 @@
+/// <reference path='highlighter.ts' />
+
 "use strict";
 
 $(document).ready(function() {
