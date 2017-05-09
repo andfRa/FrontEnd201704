@@ -1,3 +1,5 @@
+/// <reference path='helper.ts' />
+
 var Animals = (function () {
     function Animals() {
         this._animals = ['Karu', 'Kass', 'Hunt'];

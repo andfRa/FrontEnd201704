@@ -9,6 +9,8 @@
     },
     "compileOnSave": true,
     "files": [
-        "app/main.ts"
+        "app/main.ts",
+        "app/highlighter.ts",
+        "app/helper.ts"
     ]
 }

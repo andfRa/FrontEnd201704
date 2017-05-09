@@ -1,26 +1,51 @@
-/// <reference path='highlighter.ts' />
-"use strict";
-var Animals = (function () {
-    function Animals() {
-        this._animals = ['Karu', 'Kass', 'Hunt'];
-        this._cacheDOM();
-        //this._bindEvents();
-        //wthis._render();
+var Helper;
+(function (Helper) {
+    function getHTML(file) {
+        var partialHTML = '';
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if (this.status === 200) {
+                    partialHTML = this.responseText;
+                }
+                else {
+                    console.error('Request failed for: ' + file);
+                }
+            }
+        };
+        request.open('GET', file, false);
+        request.send();
+        return partialHTML;
     }
-    Animals.prototype._cacheDOM = function () {
-        //this._template = Helper.getHTMLTemplate('animal.htm');
-        //this._animalsModule = document.getElementById('animalsModule');
-        //this._submitButton = this._animalsModule.getElementsByClassName('submitButton').item(0) as HTMLButtonElement;
-        //this._nameInput = this._animalsModule.getElementsByTagName('input').item(0) as HTMLInputElement;
-        //this._animalList = this._animalsModule.getElementsByTagName('ul').item(0) as HTMLUListElement;
+    Helper.getHTML = getHTML;
+    function parseHTML(target, mustache, content) {
+        return target.replace(mustache, content);
+    }
+    Helper.parseHTML = parseHTML;
+})(Helper || (Helper = {}));
+/// <reference path='helper.ts' />
+var Highlighter = (function () {
+    function Highlighter(url) {
+        this._contentDOM = Helper.getHTML(url);
+        $('#comment-content').html(this._contentDOM);
+    }
+    Highlighter.prototype.init = function () {
+        $('#ins-button').click(function () {
+            this._insertTag('ins');
+        }.bind(this));
+        $('#del-button').click(function () {
+            this._insertTag('del');
+        }.bind(this));
+        $('#mark-button').click(function () {
+            this._insertTag('mark');
+        }.bind(this));
+        $('#clear-button').click(function () {
+            this._removeTag();
+        }.bind(this));
+        document.addEventListener("selectionchange", this._updateButtons);
+        this._updateButtons();
     };
-    return Animals;
-}());
-$(document).ready(function () {
-    highlighter.init();
-});
-var highlighter = (function () {
-    var insertTag = function (tag) {
+    Highlighter.prototype._insertTag = function (tag) {
         var selection = window.getSelection();
         if (selection.rangeCount !== 0 && !selection.isCollapsed) {
             var range = window.getSelection().getRangeAt(0);
@@ -34,7 +59,7 @@ var highlighter = (function () {
             return false;
         }
     };
-    var removeTag = function () {
+    Highlighter.prototype._removeTag = function () {
         var selection = window.getSelection();
         if (selection.rangeCount !== 0 && !selection.isCollapsed) {
             var range = window.getSelection().getRangeAt(0);
@@ -48,9 +73,10 @@ var highlighter = (function () {
             return false;
         }
     };
-    var updateButtons = function () {
+    Highlighter.prototype._updateButtons = function () {
         var selection = window.getSelection();
         if (selection.rangeCount !== 0 && !selection.isCollapsed) {
+            console.log("00--" + window.getSelection().getRangeAt(0).startContainer.nodeName + ": " + window.getSelection().getRangeAt(0).startOffset);
             $('#ins-button,#del-button,#mark-button,#clear-button')
                 .removeClass('disabled');
         }
@@ -59,25 +85,11 @@ var highlighter = (function () {
                 .addClass('disabled');
         }
     };
-    return {
-        init: function () {
-            $('#ins-button').click(function () {
-                insertTag('ins');
-            });
-            $('#del-button').click(function () {
-                insertTag('del');
-            });
-            $('#mark-button').click(function () {
-                insertTag('mark');
-            });
-            $('#clear-button').click(function () {
-                removeTag();
-            });
-            document.addEventListener("selectionchange", function () {
-                updateButtons();
-            });
-            updateButtons();
-        }
-    };
-})();
+    return Highlighter;
+}());
+/// <reference path='highlighter.ts' />
+$(document).ready(function () {
+    var highlighter = new Highlighter('JavaScript - Wikipedia.htm');
+    highlighter.init();
+});
 //# sourceMappingURL=app.js.map
