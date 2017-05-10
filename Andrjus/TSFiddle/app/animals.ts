@@ -1,3 +1,5 @@
+/// <reference path='helper.ts' />
+
 /**
 * Animals
 */
@@ -16,7 +18,7 @@ class Animals {
   }
 
   private _cacheDOM() {
-    this._template = Helper.getHTMLTemplate('animal.htm');
+    this._template = Helper.getHTMLTemplate('templates/animal.htm');
     this._animalsModule = document.getElementById('animalsModule');
     this._submitButton = this._animalsModule.getElementsByClassName('submitButton').item(0) as HTMLButtonElement;
     this._nameInput = this._animalsModule.getElementsByTagName('input').item(0) as HTMLInputElement;

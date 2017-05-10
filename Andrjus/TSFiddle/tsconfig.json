@@ -5,12 +5,14 @@
         "sourceMap": true,
         "baseUrl": "./app.js",
         "lib": ["dom", "es5", "es2015.promise"],
-        "outFile": "./app.js"
+        "outFile": "./app.js",
+        "outDir": "build"
     },
     "compileOnSave": true,
     "files": [
         "app/main.ts",
         "app/helper.ts",
-        "app/animals.ts"
+        "app/animals.ts",
+        "app/page.ts"
     ]
 }
